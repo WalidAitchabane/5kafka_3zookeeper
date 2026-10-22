@@ -1,0 +1,21 @@
+---
+plugin: amazon.aws.aws_ec2
+
+regions:
+  - eu-west-1
+
+filters:
+  instance-state-name: running
+
+hostnames:
+  tag:Name
+
+compose:
+  ansible_host: public_ip_address
+  private_ip: private_ip_address
+  ansible_user: "'ubuntu'"
+  ansible_ssh_private_key_file: "'/home/blent/.ssh/id_ed25519'"
+
+groups:
+  kafka: "'kafka-broker-' in (tags.Name | default(''))"
+  zookeeper: "'zookeeper-' in (tags.Name | default(''))"
